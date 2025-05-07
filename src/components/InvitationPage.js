@@ -6,6 +6,22 @@ function InvitationPage() {
   const { id, eventId } = useParams()
   const [invitation, setInvitation] = useState(null)
 
+
+
+
+  useEffect(() => {
+    // Try to open the app using a deep link
+    const timeout = setTimeout(() => {
+      // If app isn't opened, stay on this page
+      console.log('App not detected, staying on website');
+    }, 1500);
+
+    window.location.href = `https://tiwil-invites.vercel.app/${id}/${eventId}`; // Deep link to your app
+
+    // Clear timeout if the app is opened (browser gets paused)
+    return () => clearTimeout(timeout);
+  }, [id, eventId]);
+
   useEffect(() => {
     fetch(`https://tiwil.designersx.com/get-subevents/fphvocco/6814baa6b48eb728011f67d0`)
       .then((response) => {
