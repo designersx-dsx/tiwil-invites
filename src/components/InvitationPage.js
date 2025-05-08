@@ -23,7 +23,7 @@ function InvitationPage() {
   // }, [id, eventId]);
 
   useEffect(() => {
-    fetch(`https://tiwil.designersx.com/get-subevents/fphvocco/6814baa6b48eb728011f67d0`)
+    fetch(`https://tiwil.designersx.com/get-subevents/${id}/${eventId}`, )
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok')
