@@ -3,7 +3,7 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.tiwilles",
+      "package_name": "com.tiwil",
       "sha256_cert_fingerprints": [
         "31:A5:AF:09:43:FF:11:2A:01:52:D7:9C:EE:D5:63:41:25:F1:C3:10:4B:14:21:45:FD:6E:88:93:B1:7D:B3:3A"
       ]
