@@ -159,7 +159,6 @@ function InvitationPage() {
         weekday: 'short',
         day: '2-digit',
         month: 'short',
-        year: 'numeric',
       })
     : 'Date not available';
 
