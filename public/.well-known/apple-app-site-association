@@ -3,9 +3,9 @@
     "apps": [],
     "details": [
       {
-        "appID": "6751570727.org.reactjs.native.tiwil",
+        "appID": "ST7B2PG47N.org.reactjs.native.tiwil",
         "paths": [
-          "*"
+          "/*"
         ]
       }
     ]
