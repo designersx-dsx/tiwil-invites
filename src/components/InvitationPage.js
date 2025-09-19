@@ -127,7 +127,8 @@ function InvitationPage() {
     const deepLink = `tiwil://invitation/${id}/${eventId}`;
 
     // App store URLs
-    const appStoreUrl = 'https://www.apple.com/app-store/';
+    //const appStoreUrl = 'https://www.apple.com/app-store/';
+       const appStoreUrl =  'https://testflight.apple.com/join/WYnVBhmd';
     const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.tiwil.app';
 
     // Attempt to open the app
