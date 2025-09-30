@@ -1,8 +1,11 @@
 import React from 'react';
 import './Welcome.css'; // You'll create this for styling
-
+import ElevenLabsWidget from './widget';
+import { useEffect,useRef } from 'react';
 function WelcomePage() {
-  return (
+
+
+  return (<>   <ElevenLabsWidget/>
     <div className="welcome-container">
       <img src="/images/TiwilLOGO1.png" alt="Tiwil Logo" className="logo" />
       <h1>Welcome to Tiwil</h1>
@@ -18,6 +21,7 @@ function WelcomePage() {
         Download on Play Store
       </a>
     </div>
+    </>
   );
 }
 
