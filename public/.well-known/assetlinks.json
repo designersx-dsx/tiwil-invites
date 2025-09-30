@@ -5,9 +5,8 @@
       "namespace": "android_app",
       "package_name": "com.tiwil",
       "sha256_cert_fingerprints": [
-        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C",
-        "31:A5:AF:09:43:FF:11:2A:01:52:D7:9C:EE:D5:63:41:25:F1:C3:10:4B:14:21:45:FD:6E:88:93:B1:7D:B3:3A"
-      ]
-    }
+         "SHA1: 4D:E0:46:36:B5:2E:A8:54:5A:D7:79:49:99:FF:BA:5C:9E:8A:ED:C0",
+        "SHA256: 1C:07:61:47:F8:CC:29:AB:33:B3:24:9D:6F:50:8C:BF:AF:A4:F8:6E:CC:28:9E:F1:3F:17:13:3A:62:5F:14:93"
+      ]  }
   }
 ]

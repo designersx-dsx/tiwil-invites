@@ -30,7 +30,7 @@ const ElevenLabsWidget = () => {
     };
   }, []);
 
-  return <div ref={containerRef}></div>;
+  return <div    ref={containerRef}></div>;
 };
 
 export default ElevenLabsWidget;
