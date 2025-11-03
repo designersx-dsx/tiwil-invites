@@ -6,9 +6,6 @@
 //   const { id, eventId } = useParams()
 //   const [invitation, setInvitation] = useState(null)
 
-
-
-
 //   // useEffect(() => {
 //   //   // Try to open the app using a deep link
 //   //   const timeout = setTimeout(() => {
@@ -50,10 +47,9 @@
 //       day: '2-digit',
 //       month: 'short',
 //       year: 'numeric',
-     
+
 //     })
 //   : 'Date not available';
-
 
 //   return (
 //     <div className="container">
@@ -85,7 +81,7 @@
 //       <div className="footer">
 //       Tiwil makes it simple to organize and share your special moments. Create  <strong>creatings event ,personalized invitations , wishlists , pool creations , manage your guest list,</strong> and keep track of responses—all from one place. Whether it’s birthdays, anniversaries, or family gatherings, Tiwil helps you stay organized and connected. Your event details and guest preferences are handled securely, ensuring a smooth and joyful experience for everyone involved.
 //         <br />
-        
+
 //       </div>
 //     </div>
 //   )
@@ -93,10 +89,9 @@
 
 // export default InvitationPage
 
-
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import '../components/InvitationPage.css';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import "../components/InvitationPage.css";
 
 function InvitationPage() {
   const { id, eventId } = useParams(); // id is assumed to be relation id
@@ -106,7 +101,7 @@ function InvitationPage() {
     fetch(`https://tiwil.designersx.com/get-subevents/${id}/${eventId}`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         return response.json();
       })
@@ -114,7 +109,7 @@ function InvitationPage() {
         setInvitation(data?.subEvents?.[0]); // extract first subEvent
       })
       .catch((error) => {
-        console.error('Fetch error:', error);
+        console.error("Fetch error:", error);
       });
   }, [id, eventId]);
 
@@ -128,15 +123,18 @@ function InvitationPage() {
 
     // App store URLs
     //const appStoreUrl = 'https://www.apple.com/app-store/';
-       const appStoreUrl =  'https://testflight.apple.com/join/WYnVBhmd';
+    const appStoreUrl = "https://testflight.apple.com/join/WYnVBhmd";
     // const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.tiwil.app';
-// const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(`relationId=${id}&eventId=${eventId}`)}`;
-   
-const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(
-  `relationId=${id}&eventId=${eventId}`
-)}`;
-// Attempt to open the app
-    console.log(playStoreUrl,"playstoreurl")
+    // const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(`relationId=${id}&eventId=${eventId}`)}`;
+
+    // const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(
+    //   `relationId=${id}&eventId=${eventId}`
+
+    const playStoreUrl = `https://play.google.com/apps/testing/com.tiwil?referrer=${encodeURIComponent(
+      `relationId=${id}&eventId=${eventId}`
+    )}`;
+    // Attempt to open the app
+    console.log(playStoreUrl, "playstoreurl");
     window.location.href = deepLink;
 
     // Fallback to app store after 1.5 seconds if app doesn't open
@@ -146,7 +144,7 @@ const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803
       } else if (isAndroid) {
         window.location.href = playStoreUrl;
       } else {
-        console.log('Unknown platform, staying on website');
+        console.log("Unknown platform, staying on website");
       }
     }, 1500);
 
@@ -161,12 +159,12 @@ const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803
   const rawDate = invitation?.eventDate || invitation?.dob;
 
   const formattedDate = rawDate
-    ? new Date(rawDate).toLocaleString('en-IN', {
-        weekday: 'short',
-        day: '2-digit',
-        month: 'short',
+    ? new Date(rawDate).toLocaleString("en-IN", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
       })
-    : 'Date not available';
+    : "Date not available";
 
   return (
     <div className="container">
@@ -179,16 +177,16 @@ const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803
         style={{
           backgroundImage: invitation.eventimage
             ? `url(https://tiwil.designersx.com/${invitation.eventimage})`
-            : 'url(/images/Bg-image-Event.png)',
+            : "url(/images/Bg-image-Event.png)",
         }}
       >
         <div className="card-content">
           <p>
-            {invitation.name || 'Someone'}
+            {invitation.name || "Someone"}
             <br />
             Sent you an invitation
           </p>
-          <h2>{invitation.eventType || 'Event'}</h2>
+          <h2>{invitation.eventType || "Event"}</h2>
           <time>{formattedDate}</time>
         </div>
       </div>
@@ -198,11 +196,15 @@ const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803
       </button>
 
       <div className="footer">
-        Tiwil makes it simple to organize and share your special moments. Create{' '}
-        <strong>creatings event, personalized invitations, wishlists, pool creations, manage your guest list,</strong>{' '}
-        and keep track of responses—all from one place. Whether it’s birthdays, anniversaries, or family gatherings,
-        Tiwil helps you stay organized and connected. Your event details and guest preferences are handled securely,
-        ensuring a smooth and joyful experience for everyone involved.
+        Tiwil makes it simple to organize and share your special moments. Create{" "}
+        <strong>
+          creatings event, personalized invitations, wishlists, pool creations,
+          manage your guest list,
+        </strong>{" "}
+        and keep track of responses—all from one place. Whether it’s birthdays,
+        anniversaries, or family gatherings, Tiwil helps you stay organized and
+        connected. Your event details and guest preferences are handled
+        securely, ensuring a smooth and joyful experience for everyone involved.
         <br />
       </div>
     </div>
