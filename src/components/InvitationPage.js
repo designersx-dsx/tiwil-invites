@@ -127,11 +127,16 @@ function InvitationPage() {
     // const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.tiwil.app';
     // const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(`relationId=${id}&eventId=${eventId}`)}`;
 
-    const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(
-      `relationId=${id}&eventId=${eventId}`
+    // const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(
+    //   `relationId=${id}&eventId=${eventId}`
 
-      // const playStoreUrl = `https://play.google.com/apps/testing/com.tiwil?referrer=${encodeURIComponent(
-      //   `relationId=${id}&eventId=${eventId}`
+    // URL UPDATE ON 3-11-25
+    // const playStoreUrl = `https://play.google.com/apps/testing/com.tiwil?referrer=${encodeURIComponent(
+    //   `relationId=${id}&eventId=${eventId}`
+
+    // URL UPDATE ON 4-11-25
+    const playStoreUrl = `https://play.google.com/store/apps/details?id=com.tiwil&referrer=${encodeURIComponent(
+      `relationId=${id}&eventId=${eventId}`
     )}`;
     // Attempt to open the app
     console.log(playStoreUrl, "playstoreurl");
