@@ -135,7 +135,7 @@ function InvitationPage() {
     //   `relationId=${id}&eventId=${eventId}`
 
     // URL UPDATE ON 4-11-25
-    const playStoreUrl = `https://play.google.com/store/apps/details/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(
+    const playStoreUrl = `https://play.google.com/store/apps/details?id=com.tiwil&referrer=${encodeURIComponent(
       `relationId=${id}&eventId=${eventId}`
     )}`;
     // Attempt to open the app
