@@ -113,58 +113,92 @@ function InvitationPage() {
       });
   }, [id, eventId]);
 
-  const handleViewInvitation = () => {
+  // const handleViewInvitation = () => {
+  //   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  //   const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+  //   const isAndroid = /Android/.test(userAgent);
+
+  //   // Deep link to app with eventId and relation id
+  //   const deepLink = `tiwil://invitation/${id}/${eventId}`;
+
+  //   // App store URLs
+  //   //const appStoreUrl = 'https://www.apple.com/app-store/';
+  //   const appStoreUrl = `https://testflight.apple.com/join/WYnVBhmd`;
+  //   // const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.tiwil.app';
+  //   // const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(`relationId=${id}&eventId=${eventId}`)}`;
+
+  //   // const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(
+  //   //   `relationId=${id}&eventId=${eventId}`
+
+  //   // URL UPDATE ON 3-11-25
+  //   // const playStoreUrl = `https://play.google.com/apps/testing/com.tiwil?referrer=${encodeURIComponent(
+  //   //   `relationId=${id}&eventId=${eventId}`
+
+  //   // URL UPDATE ON 4-11-25
+  //   const playStoreUrl = `https://play.google.com/store/apps/details?id=com.tiwil&referrer=${encodeURIComponent(
+  //     `relationId=${id}&eventId=${eventId}`
+  //   )}`;
+  //   // Attempt to open the app
+  //   console.log(playStoreUrl, "playstoreurl");
+  //   window.location.href = deepLink;
+
+  //   // Fallback to app store after 1.5 seconds if app doesn't open
+  //   const timeout = setTimeout(async () => {
+  //     if (isIOS) {
+  //       try {
+  //         console.log("ios device is here");
+  //         // 🔥 Post IP + relationId + eventId request to backend
+  //         await axios.post(
+  //           `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
+  //         );
+  //       } catch (error) {
+  //         console.log("Save invite failed:", error);
+  //       }
+  //       window.location.href = appStoreUrl;
+  //     } else if (isAndroid) {
+  //       console.log("android device is here");
+  //       window.location.href = playStoreUrl;
+  //     } else {
+  //       console.log("Unknown platform, staying on website");
+  //     }
+  //   }, 1500);
+
+  //   // Clear timeout if the app opens
+  //   return () => clearTimeout(timeout);
+  // };
+
+  const handleViewInvitation = async () => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
     const isAndroid = /Android/.test(userAgent);
 
-    // Deep link to app with eventId and relation id
     const deepLink = `tiwil://invitation/${id}/${eventId}`;
-
-    // App store URLs
-    //const appStoreUrl = 'https://www.apple.com/app-store/';
     const appStoreUrl = `https://testflight.apple.com/join/WYnVBhmd`;
-    // const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.tiwil.app';
-    // const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(`relationId=${id}&eventId=${eventId}`)}`;
-
-    // const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(
-    //   `relationId=${id}&eventId=${eventId}`
-
-    // URL UPDATE ON 3-11-25
-    // const playStoreUrl = `https://play.google.com/apps/testing/com.tiwil?referrer=${encodeURIComponent(
-    //   `relationId=${id}&eventId=${eventId}`
-
-    // URL UPDATE ON 4-11-25
     const playStoreUrl = `https://play.google.com/store/apps/details?id=com.tiwil&referrer=${encodeURIComponent(
       `relationId=${id}&eventId=${eventId}`
     )}`;
-    // Attempt to open the app
-    console.log(playStoreUrl, "playstoreurl");
+
+    // Try opening the app
     window.location.href = deepLink;
 
-    // Fallback to app store after 1.5 seconds if app doesn't open
-    const timeout = setTimeout(async () => {
+    setTimeout(async () => {
       if (isIOS) {
         try {
-          console.log("ios device is here");
-          // 🔥 Post IP + relationId + eventId request to backend
+          console.log("iOS device detected — saving invite...");
           await axios.post(
             `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
           );
-        } catch (error) {
-          console.log("Save invite failed:", error);
+        } catch (err) {
+          console.log("Save invite error:", err);
         }
+
         window.location.href = appStoreUrl;
       } else if (isAndroid) {
-        console.log("android device is here");
         window.location.href = playStoreUrl;
       } else {
-        console.log("Unknown platform, staying on website");
+        console.log("Unknown device");
       }
     }, 1500);
-
-    // Clear timeout if the app opens
-    return () => clearTimeout(timeout);
   };
 
   if (!invitation) {
