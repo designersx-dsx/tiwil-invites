@@ -92,7 +92,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../components/InvitationPage.css";
-
+import axios from "axios";
 function InvitationPage() {
   const { id, eventId } = useParams(); // id is assumed to be relation id
   const [invitation, setInvitation] = useState(null);
@@ -211,15 +211,6 @@ function InvitationPage() {
     )}`;
 
     // 1️⃣ FIRST HIT THE API (before any redirect)
-    try {
-      console.log("Sending invite to server...");
-      await axios.post(
-        `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
-      );
-      console.log("API success!");
-    } catch (err) {
-      console.log("API failed:", err);
-    }
 
     // 2️⃣ NOW TRY TO OPEN THE APP — after API
     setTimeout(() => {
@@ -227,8 +218,17 @@ function InvitationPage() {
     }, 300); // small delay so API finishes cleanly
 
     // 3️⃣ FALLBACK AFTER 1.5 SECONDS
-    setTimeout(() => {
+    setTimeout(async () => {
       if (isIOS) {
+        try {
+          console.log("Sending invite to server...");
+          await axios.post(
+            `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
+          );
+          console.log("API success!");
+        } catch (err) {
+          console.log("API failed:", err);
+        }
         window.location.href = appStoreUrl;
       } else if (isAndroid) {
         window.location.href = playStoreUrl;
