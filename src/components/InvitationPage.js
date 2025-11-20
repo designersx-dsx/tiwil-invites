@@ -198,6 +198,125 @@ function InvitationPage() {
   //     }
   //   }, 1500);
   // };
+  function getDeviceFingerprint() {
+    console.log("📌 Generating Device Fingerprint...");
+
+    try {
+      const fp = btoa(
+        navigator.userAgent +
+          navigator.language +
+          screen.width +
+          screen.height +
+          screen.colorDepth +
+          Intl.DateTimeFormat().resolvedOptions().timeZone
+      );
+
+      console.log("✅ Fingerprint Generated:", fp);
+      return fp;
+    } catch (err) {
+      console.log("❌ Fingerprint Error:", err);
+      return null;
+    }
+  }
+
+  function getPrivateIP() {
+    console.log("📌 Starting Private IP Detection...");
+
+    return new Promise((resolve) => {
+      try {
+        const pc = new RTCPeerConnection({ iceServers: [] });
+        console.log("🔧 RTCPeerConnection created:", pc);
+
+        pc.createDataChannel("");
+        console.log("📡 DataChannel created");
+
+        pc.onicecandidate = (event) => {
+          console.log("📨 ICE Candidate Event:", event);
+
+          if (!event || !event.candidate) {
+            console.log("⚠️ No ICE candidate yet...");
+            return;
+          }
+
+          const candidate = event.candidate.candidate;
+          console.log("📝 Candidate String:", candidate);
+
+          const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
+          const match = candidate.match(ipRegex);
+
+          console.log("🔍 Regex Match Result:", match);
+
+          if (match) {
+            console.log("🎉 PRIVATE IP FOUND:", match[1]);
+            resolve(match[1]);
+            pc.close();
+          }
+        };
+
+        pc.createOffer()
+          .then((offer) => {
+            console.log("📜 Offer Created:", offer);
+            return pc.setLocalDescription(offer);
+          })
+          .then(() => {
+            console.log("📌 Local Description Set!");
+          })
+          .catch((err) => {
+            console.log("❌ Offer/SDP Error:", err);
+            resolve(null);
+          });
+
+        // Timeout fail-safe
+        setTimeout(() => {
+          console.log("⏳ Timeout reached. Private IP not found.");
+          resolve(null);
+          pc.close();
+        }, 3000);
+      } catch (err) {
+        console.log("❌ Private IP Error:", err);
+        resolve(null);
+      }
+    });
+  }
+
+  // const handleViewInvitation = async () => {
+  //   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  //   const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+  //   const isAndroid = /Android/.test(userAgent);
+
+  //   const deepLink = `tiwil://invitation/${id}/${eventId}`;
+  //   const appStoreUrl = `https://testflight.apple.com/join/WYnVBhmd`;
+  //   const playStoreUrl = `https://play.google.com/store/apps/details?id=com.tiwil&referrer=${encodeURIComponent(
+  //     `relationId=${id}&eventId=${eventId}`
+  //   )}`;
+
+  //   // 1️⃣ FIRST HIT THE API (before any redirect)
+
+  //   // 2️⃣ NOW TRY TO OPEN THE APP — after API
+  //   setTimeout(() => {
+  //     window.location.href = deepLink;
+  //   }, 300); // small delay so API finishes cleanly
+
+  //   // 3️⃣ FALLBACK AFTER 1.5 SECONDS
+  //   setTimeout(async () => {
+  //     if (isIOS) {
+  //       try {
+  //         console.log("Sending invite to server...");
+  //         await axios.post(
+  //           `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
+  //         );
+  //         console.log("API success!");
+  //       } catch (err) {
+  //         console.log("API failed:", err);
+  //       }
+  //       window.location.href = appStoreUrl;
+  //     } else if (isAndroid) {
+  //       window.location.href = playStoreUrl;
+  //     } else {
+  //       console.log("Unknown device");
+  //     }
+  //   }, 1800);
+  // };
 
   const handleViewInvitation = async () => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -210,25 +329,47 @@ function InvitationPage() {
       `relationId=${id}&eventId=${eventId}`
     )}`;
 
-    // 1️⃣ FIRST HIT THE API (before any redirect)
+    // 🔥 1️⃣ Generate fingerprint + private IP
+    const deviceFingerprint = getDeviceFingerprint();
+    let privateIP = null;
+    // console.log(privateIP, "privateip");
+    try {
+      privateIP = await getPrivateIP();
+      // console.log(privateIP, "privateip23");
+    } catch (e) {
+      privateIP = null; // safari block -> ignore
+    }
 
-    // 2️⃣ NOW TRY TO OPEN THE APP — after API
+    // 🔥 2️⃣ Send tracking to backend BEFORE redirect
+    // console.log(
+    //   deviceFingerprint,
+    //   "device fingerprint",
+    //   privateIP,
+    //   userAgent,
+    //   "useragent"
+    // );
+    try {
+      await axios.post(
+        `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`,
+        {
+          deviceFingerprint,
+          privateIP,
+          userAgent,
+        }
+      );
+      console.log("Tracking saved!", { deviceFingerprint, privateIP });
+    } catch (err) {
+      console.log("Tracking failed:", err);
+    }
+
+    // 🔥 3️⃣ Try to open the app
     setTimeout(() => {
       window.location.href = deepLink;
-    }, 300); // small delay so API finishes cleanly
+    }, 300);
 
-    // 3️⃣ FALLBACK AFTER 1.5 SECONDS
-    setTimeout(async () => {
+    // 🔥 4️⃣ Fallback to store
+    setTimeout(() => {
       if (isIOS) {
-        try {
-          console.log("Sending invite to server...");
-          await axios.post(
-            `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
-          );
-          console.log("API success!");
-        } catch (err) {
-          console.log("API failed:", err);
-        }
         window.location.href = appStoreUrl;
       } else if (isAndroid) {
         window.location.href = playStoreUrl;
