@@ -177,9 +177,6 @@ function InvitationPage() {
     const playStoreUrl = `https://play.google.com/store/apps/details?id=com.tiwil&referrer=${encodeURIComponent(
       `relationId=${id}&eventId=${eventId}`
     )}`;
-
-    // Try opening the app
-    window.location.href = deepLink;
     try {
       console.log("iOS device detected — saving invite...");
       await axios.post(
@@ -188,6 +185,9 @@ function InvitationPage() {
     } catch (err) {
       console.log("Save invite error:", err);
     }
+    // Try opening the app
+    window.location.href = deepLink;
+
     setTimeout(async () => {
       if (isIOS) {
         window.location.href = appStoreUrl;
