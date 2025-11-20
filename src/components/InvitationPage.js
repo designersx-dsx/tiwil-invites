@@ -167,6 +167,38 @@ function InvitationPage() {
   //   return () => clearTimeout(timeout);
   // };
 
+  // const handleViewInvitation = async () => {
+  //   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  //   const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+  //   const isAndroid = /Android/.test(userAgent);
+
+  //   const deepLink = `tiwil://invitation/${id}/${eventId}`;
+  //   const appStoreUrl = `https://testflight.apple.com/join/WYnVBhmd`;
+  //   const playStoreUrl = `https://play.google.com/store/apps/details?id=com.tiwil&referrer=${encodeURIComponent(
+  //     `relationId=${id}&eventId=${eventId}`
+  //   )}`;
+  //   try {
+  //     console.log("iOS device detected — saving invite...");
+  //     await axios.post(
+  //       `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
+  //     );
+  //   } catch (err) {
+  //     console.log("Save invite error:", err);
+  //   }
+  //   // Try opening the app
+  //   window.location.href = deepLink;
+
+  //   setTimeout(async () => {
+  //     if (isIOS) {
+  //       window.location.href = appStoreUrl;
+  //     } else if (isAndroid) {
+  //       window.location.href = playStoreUrl;
+  //     } else {
+  //       console.log("Unknown device");
+  //     }
+  //   }, 1500);
+  // };
+
   const handleViewInvitation = async () => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
@@ -177,18 +209,25 @@ function InvitationPage() {
     const playStoreUrl = `https://play.google.com/store/apps/details?id=com.tiwil&referrer=${encodeURIComponent(
       `relationId=${id}&eventId=${eventId}`
     )}`;
+
+    // 1️⃣ FIRST HIT THE API (before any redirect)
     try {
-      console.log("iOS device detected — saving invite...");
+      console.log("Sending invite to server...");
       await axios.post(
         `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
       );
+      console.log("API success!");
     } catch (err) {
-      console.log("Save invite error:", err);
+      console.log("API failed:", err);
     }
-    // Try opening the app
-    window.location.href = deepLink;
 
-    setTimeout(async () => {
+    // 2️⃣ NOW TRY TO OPEN THE APP — after API
+    setTimeout(() => {
+      window.location.href = deepLink;
+    }, 300); // small delay so API finishes cleanly
+
+    // 3️⃣ FALLBACK AFTER 1.5 SECONDS
+    setTimeout(() => {
       if (isIOS) {
         window.location.href = appStoreUrl;
       } else if (isAndroid) {
@@ -196,7 +235,7 @@ function InvitationPage() {
       } else {
         console.log("Unknown device");
       }
-    }, 1500);
+    }, 1800);
   };
 
   if (!invitation) {
