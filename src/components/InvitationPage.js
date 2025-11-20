@@ -123,8 +123,7 @@ function InvitationPage() {
 
     // App store URLs
     //const appStoreUrl = 'https://www.apple.com/app-store/';
-    const appStoreUrl = `https://testflight.apple.com/join/WYnVBhmd?id=com.tiwil&referrer=${encodeURIComponent(
-      `relationId=${id}&eventId=${eventId}`)}`;
+    const appStoreUrl = `https://testflight.apple.com/join/WYnVBhmd`;
     // const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.tiwil.app';
     // const playStoreUrl = `https://play.google.com/apps/internaltest/4700816917921803275?id=com.tiwil&referrer=${encodeURIComponent(`relationId=${id}&eventId=${eventId}`)}`;
 
@@ -144,8 +143,14 @@ function InvitationPage() {
     window.location.href = deepLink;
 
     // Fallback to app store after 1.5 seconds if app doesn't open
-    const timeout = setTimeout(() => {
+    const timeout = setTimeout(async() => {
       if (isIOS) {
+        try {
+      // 🔥 Post IP + relationId + eventId request to backend
+      await axios.post(`https://tiwil.designersx.com/saveinvite/${id}/${eventId}`);
+    } catch (error) {
+      console.log("Save invite failed:", error);
+    }
         window.location.href = appStoreUrl;
       } else if (isAndroid) {
         window.location.href = playStoreUrl;
