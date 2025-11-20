@@ -180,18 +180,16 @@ function InvitationPage() {
 
     // Try opening the app
     window.location.href = deepLink;
-
+    try {
+      console.log("iOS device detected — saving invite...");
+      await axios.post(
+        `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
+      );
+    } catch (err) {
+      console.log("Save invite error:", err);
+    }
     setTimeout(async () => {
       if (isIOS) {
-        try {
-          console.log("iOS device detected — saving invite...");
-          await axios.post(
-            `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
-          );
-        } catch (err) {
-          console.log("Save invite error:", err);
-        }
-
         window.location.href = appStoreUrl;
       } else if (isAndroid) {
         window.location.href = playStoreUrl;
