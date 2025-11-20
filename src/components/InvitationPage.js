@@ -143,16 +143,20 @@ function InvitationPage() {
     window.location.href = deepLink;
 
     // Fallback to app store after 1.5 seconds if app doesn't open
-    const timeout = setTimeout(async() => {
+    const timeout = setTimeout(async () => {
       if (isIOS) {
         try {
-      // 🔥 Post IP + relationId + eventId request to backend
-      await axios.post(`https://tiwil.designersx.com/saveinvite/${id}/${eventId}`);
-    } catch (error) {
-      console.log("Save invite failed:", error);
-    }
+          console.log("ios device is here");
+          // 🔥 Post IP + relationId + eventId request to backend
+          await axios.post(
+            `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`
+          );
+        } catch (error) {
+          console.log("Save invite failed:", error);
+        }
         window.location.href = appStoreUrl;
       } else if (isAndroid) {
+        console.log("android device is here");
         window.location.href = playStoreUrl;
       } else {
         console.log("Unknown platform, staying on website");
