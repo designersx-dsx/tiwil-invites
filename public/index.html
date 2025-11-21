@@ -28,7 +28,7 @@
         console.log(tz, "tz");
 
         // Language bilkul nahi daal rahe — 100% match ke liye
-        const raw = `${ua}|||${width}|||${height}|||${color}|||${tz}`;
+        const raw = `${width}|||${height}|||${color}|||${tz}`;
         console.log(raw, "raw");
         const encoded = btoa(raw);
         return {
