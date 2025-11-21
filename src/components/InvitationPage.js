@@ -318,6 +318,67 @@ function InvitationPage() {
   //   }, 1800);
   // };
 
+  // const handleViewInvitation = async () => {
+  //   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  //   const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+  //   const isAndroid = /Android/.test(userAgent);
+
+  //   const deepLink = `tiwil://invitation/${id}/${eventId}`;
+  //   const appStoreUrl = `https://testflight.apple.com/join/WYnVBhmd`;
+  //   const playStoreUrl = `https://play.google.com/store/apps/details?id=com.tiwil&referrer=${encodeURIComponent(
+  //     `relationId=${id}&eventId=${eventId}`
+  //   )}`;
+
+  //   // 🔥 1️⃣ Generate fingerprint + private IP
+  //   const deviceFingerprint = getDeviceFingerprint();
+  //   let privateIP = null;
+  //   // console.log(privateIP, "privateip");
+  //   try {
+  //     privateIP = await getPrivateIP();
+  //     // console.log(privateIP, "privateip23");
+  //   } catch (e) {
+  //     privateIP = null; // safari block -> ignore
+  //   }
+
+  //   // 🔥 2️⃣ Send tracking to backend BEFORE redirect
+  //   // console.log(
+  //   //   deviceFingerprint,
+  //   //   "device fingerprint",
+  //   //   privateIP,
+  //   //   userAgent,
+  //   //   "useragent"
+  //   // );
+  //   try {
+  //     await axios.post(
+  //       `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`,
+  //       {
+  //         deviceFingerprint,
+  //         privateIP,
+  //         userAgent,
+  //       }
+  //     );
+  //     console.log("Tracking saved!", { deviceFingerprint, privateIP });
+  //   } catch (err) {
+  //     console.log("Tracking failed:", err);
+  //   }
+
+  //   // 🔥 3️⃣ Try to open the app
+  //   setTimeout(() => {
+  //     window.location.href = deepLink;
+  //   }, 300);
+
+  //   // 🔥 4️⃣ Fallback to store
+  //   setTimeout(() => {
+  //     if (isIOS) {
+  //       window.location.href = appStoreUrl;
+  //     } else if (isAndroid) {
+  //       window.location.href = playStoreUrl;
+  //     } else {
+  //       console.log("Unknown device");
+  //     }
+  //   }, 1800);
+  // };
+
   const handleViewInvitation = async () => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
@@ -329,56 +390,36 @@ function InvitationPage() {
       `relationId=${id}&eventId=${eventId}`
     )}`;
 
-    // 🔥 1️⃣ Generate fingerprint + private IP
-    const deviceFingerprint = getDeviceFingerprint();
-    let privateIP = null;
-    // console.log(privateIP, "privateip");
-    try {
-      privateIP = await getPrivateIP();
-      // console.log(privateIP, "privateip23");
-    } catch (e) {
-      privateIP = null; // safari block -> ignore
-    }
+    // YE MAGIC LINE — 100% SAME FINGERPRINT
+    const deviceFingerprint = window.getTiwilFingerprint();
+    console.log("FINAL FINGERPRINT →", deviceFingerprint);
 
-    // 🔥 2️⃣ Send tracking to backend BEFORE redirect
-    // console.log(
-    //   deviceFingerprint,
-    //   "device fingerprint",
-    //   privateIP,
-    //   userAgent,
-    //   "useragent"
-    // );
-    try {
-      await axios.post(
-        `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`,
-        {
-          deviceFingerprint,
-          privateIP,
-          userAgent,
-        }
-      );
-      console.log("Tracking saved!", { deviceFingerprint, privateIP });
-    } catch (err) {
-      console.log("Tracking failed:", err);
-    }
+    // Backend hit
 
-    // 🔥 3️⃣ Try to open the app
-    setTimeout(() => {
-      window.location.href = deepLink;
-    }, 300);
+    // App open try
+    window.location.href = deepLink;
 
-    // 🔥 4️⃣ Fallback to store
-    setTimeout(() => {
+    // Fallback
+    setTimeout(async () => {
       if (isIOS) {
+        try {
+          await axios.post(
+            `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`,
+            {
+              deviceFingerprint,
+              userAgent,
+              source: "web-perfect-match",
+            }
+          );
+          console.log("Invite saved with PERFECT fingerprint!");
+        } catch (err) {
+          console.log("Save failed:", err);
+        }
+
         window.location.href = appStoreUrl;
-      } else if (isAndroid) {
-        window.location.href = playStoreUrl;
-      } else {
-        console.log("Unknown device");
-      }
+      } else if (isAndroid) window.location.href = playStoreUrl;
     }, 1800);
   };
-
   if (!invitation) {
     return <div>Loading...</div>;
   }
