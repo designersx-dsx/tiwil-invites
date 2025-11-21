@@ -93,6 +93,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../components/InvitationPage.css";
 import axios from "axios";
+
 function InvitationPage() {
   const { id, eventId } = useParams(); // id is assumed to be relation id
   const [invitation, setInvitation] = useState(null);
@@ -391,31 +392,32 @@ function InvitationPage() {
     )}`;
 
     // YE MAGIC LINE — 100% SAME FINGERPRINT
-    const deviceFingerprint = window.getTiwilFingerprint();
-    console.log("FINAL FINGERPRINT →", deviceFingerprint);
+    const { raw, encoded } = window.getTiwilFingerprint();
+    console.log("FINAL FINGERPRINT →", encoded);
 
     // Backend hit
+  
 
     // App open try
     window.location.href = deepLink;
 
     // Fallback
-    setTimeout(async () => {
+    setTimeout(async() => {
       if (isIOS) {
-        try {
-          await axios.post(
-            `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`,
-            {
-              deviceFingerprint,
-              userAgent,
-              source: "web-perfect-match",
-            }
-          );
-          console.log("Invite saved with PERFECT fingerprint!");
-        } catch (err) {
-          console.log("Save failed:", err);
+          try {
+      await axios.post(
+        `http://192.168.0.17:3839/saveinvite/${id}/${eventId}`,
+        {
+          encoded,
+          raw,
+          userAgent,
+      
         }
-
+      );
+      console.log("Invite saved with PERFECT fingerprint!");
+    } catch (err) {
+      console.log("Save failed:", err);
+    }
         window.location.href = appStoreUrl;
       } else if (isAndroid) window.location.href = playStoreUrl;
     }, 1800);

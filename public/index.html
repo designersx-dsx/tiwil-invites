@@ -15,34 +15,26 @@
 
     <!-- YE 2 LINE DAAL DI HAIN — SABSE UPAR HEAD ME -->
     <script src="https://cdn.jsdelivr.net/npm/react-native-device-info@10.12.0/dist/react-native-device-info.web.js"></script>
-
     <script>
-      // Ye function web pe bhi React Native jaisa fingerprint banayega
       window.getTiwilFingerprint = function () {
         const ua = navigator.userAgent;
-        const lang = navigator.language || navigator.userLanguage || "en";
+        console.log(ua, "ua");
         const width = screen.width;
+        console.log(width, "width");
         const height = screen.height;
-        const color = screen.colorDepth || 32;
+        console.log(height, "height");
+        const color = 32;
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        console.log(tz, "tz");
 
-        // Ye exact same string banega jo React Native me banega
-        const raw = `${ua}|||${lang}|||${width}|||${height}|||${color}|||${tz}`;
-
-        // btoa safe kar diya (special chars ke liye)
-        const safeBtoa = (str) => {
-          try {
-            return btoa(str);
-          } catch (e) {
-            return btoa(
-              encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) =>
-                String.fromCharCode("0x" + p1)
-              )
-            );
-          }
+        // Language bilkul nahi daal rahe — 100% match ke liye
+        const raw = `${ua}|||${width}|||${height}|||${color}|||${tz}`;
+        console.log(raw, "raw");
+        const encoded = btoa(raw);
+        return {
+          raw,
+          encoded,
         };
-
-        return safeBtoa(raw);
       };
     </script>
   </head>
