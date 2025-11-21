@@ -393,9 +393,10 @@ function InvitationPage() {
 
     // YE MAGIC LINE — 100% SAME FINGERPRINT
     const { raw, encoded } = window.getTiwilFingerprint();
-    console.log("FINAL FINGERPRINT →", encoded);
+    alert("FINAL FINGERPRINT →", encoded);
 
     // Backend hit
+    alert("data is here before deep link");
 
     // App open try
     window.location.href = deepLink;
@@ -403,6 +404,7 @@ function InvitationPage() {
     // Fallback
     setTimeout(async () => {
       if (isIOS) {
+        alert("ios hai phone");
         try {
           await axios.post(
             `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`,
