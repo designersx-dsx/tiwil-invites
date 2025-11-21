@@ -405,7 +405,7 @@ function InvitationPage() {
       if (isIOS) {
         try {
           await axios.post(
-            `https://7937d7a0129d.ngrok-free.app/saveinvite/${id}/${eventId}`,
+            `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`,
             {
               encoded,
               raw,
