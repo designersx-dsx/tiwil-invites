@@ -396,28 +396,26 @@ function InvitationPage() {
     console.log("FINAL FINGERPRINT →", encoded);
 
     // Backend hit
-  
 
     // App open try
     window.location.href = deepLink;
 
     // Fallback
-    setTimeout(async() => {
+    setTimeout(async () => {
       if (isIOS) {
-          try {
-      await axios.post(
-        `http://192.168.0.17:3839/saveinvite/${id}/${eventId}`,
-        {
-          encoded,
-          raw,
-          userAgent,
-      
+        try {
+          await axios.post(
+            `https://7937d7a0129d.ngrok-free.app/saveinvite/${id}/${eventId}`,
+            {
+              encoded,
+              raw,
+              userAgent,
+            }
+          );
+          console.log("Invite saved with PERFECT fingerprint!");
+        } catch (err) {
+          console.log("Save failed:", err);
         }
-      );
-      console.log("Invite saved with PERFECT fingerprint!");
-    } catch (err) {
-      console.log("Save failed:", err);
-    }
         window.location.href = appStoreUrl;
       } else if (isAndroid) window.location.href = playStoreUrl;
     }, 1800);
