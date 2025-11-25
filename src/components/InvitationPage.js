@@ -97,6 +97,7 @@ import axios from "axios";
 function InvitationPage() {
   const { id, eventId } = useParams(); // id is assumed to be relation id
   const [invitation, setInvitation] = useState(null);
+  const [owner,setOwner]=useState(null)
 
   useEffect(() => {
     fetch(`https://tiwil.designersx.com/get-subevents/${id}/${eventId}`)
@@ -108,6 +109,7 @@ function InvitationPage() {
       })
       .then((data) => {
         setInvitation(data?.subEvents?.[0]); // extract first subEvent
+        setOwner(data?.OwnerEvent)
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -425,7 +427,8 @@ function InvitationPage() {
     return <div>Loading...</div>;
   }
 
-  const rawDate = invitation?.eventDate || invitation?.dob;
+  const rawDate =
+    invitation?.eventDate || invitation?.dob || invitation.anniversaryDate;
 
   const formattedDate = rawDate
     ? new Date(rawDate).toLocaleString("en-IN", {
@@ -451,7 +454,7 @@ function InvitationPage() {
       >
         <div className="card-content">
           <p>
-            {invitation.name || "Someone"}
+            {invitation?.name ||owner?.name|| "Someone"}
             <br />
             Sent you an invitation
           </p>
