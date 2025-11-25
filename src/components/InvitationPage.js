@@ -405,7 +405,7 @@ function InvitationPage() {
     // Fallback
     setTimeout(async () => {
       if (isIOS) {
-        alert("ios hai");
+      
         try {
           await axios.post(
             `https://tiwil.designersx.com/saveinvite/${id}/${eventId}`,
